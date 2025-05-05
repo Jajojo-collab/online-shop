@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>styleX – Cart</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <h1 class="logo">styleX</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="cart.html" class="cart-btn">
+          Cart (<span id="cart-count">0</span>)
+        </a>
+      </nav>
+    </div>
+  </header>
+  <main class="cart-layout container">
+    <div class="cart-left">
+      <h2 class="section-title">Shopping Cart <span id="cart-item-count">(0 Items)</span></h2>
+      <div id="cart-items" class="cart-items-list">
+        <!-- Produkte werden hier eingefügt -->
+      </div>
+      <a href="shop.html" class="back-link">← Back to shop</a>
+    </div>
+  
+    <div class="cart-right">
+      <h3>Summary</h3>
+      <div class="summary-row">
+        <span>ITEMS</span>
+        <span id="summary-items">0</span>
+      </div>
+      <div class="summary-row">
+        <span>SHIPPING</span>
+        <span>5 CHF</span>
+      </div>
+      <div class="summary-row">
+        <span>GIVE CODE</span>
+        <input type="text" placeholder="Enter your code" class="code-input">
+      </div>
+      <div class="summary-row total">
+        <span>TOTAL PRICE</span>
+        <span id="summary-total">0.00 CHF</span>
+      </div>
+      <a href="checkout.html" class="btn checkout-btn">CHECKOUT</a>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="container text-center">
+      &copy; 2025 styleX. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

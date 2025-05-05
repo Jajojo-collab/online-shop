@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>styleX – Contact</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <h1 class="logo">styleX</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="cart.html" class="cart-btn">Cart (<span id="cart-count">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="contact-section">
+    <div class="map-background">
+      <img src="assets/Map.jpg" alt="map" class="map-image">
+      <div class="map-overlay">
+        <h2>Contact us</h2>
+        <div class="info-boxes">
+          <div>
+            <p><strong>Our Address</strong><br>
+              Fashionstrasse 21<br>
+              8000 Zurich<br>
+              Switzerland</p>
+          </div>
+          <div>
+            <p><strong>Our Contacts</strong><br>
+              info@stylex.ch<br>
+              +41 78 123 45 67</p>
+          </div>
+        </div>
+        <div class="social-footer">
+          <span>— follow us</span>
+          <div class="social-icons">
+            <a href="https://facebook.com" target="_blank"><i data-feather="facebook"></i></a>
+            <a href="https://instagram.com" target="_blank"><i data-feather="instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank"><i data-feather="linkedin"></i></a>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Floating Form -->
+      <form class="contact-form" action="php/contact-form.php" method="POST" enctype="multipart/form-data">
+        <h3>Feedback Form</h3>
+        <label>Name</label>
+        <input type="text" name="name" required />
+        <label>Email</label>
+        <input type="email" name="email" required />
+        <label>Phone</label>
+        <input type="tel" name="phone" />
+        <label>Message</label>
+        <textarea name="message" rows="4" required></textarea>
+        <div class="upload-wrapper">
+          <label for="file-upload" class="upload-label">
+            <i data-feather="upload"></i> Upload file
+        </label>
+        
+          <input type="file" id="file-upload" name="file" hidden>
+        </div>
+        <button type="submit" class="submit-btn">Send Message →</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container text-center">
+      &copy; 2025 styleX. All rights reserved. | <a href="impressum.html">Impressum</a>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/feather-icons"></script>
+<script>
+  feather.replace();
+</script>
+
+</body>
+</html>

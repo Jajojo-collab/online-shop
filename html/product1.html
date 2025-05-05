@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product – Linen Pants</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <script src="../script.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <h1 class="logo">styleX</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html" class="cart-btn">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container product-page">
+  <div class="product-gallery">
+    <img class="main-image" src="assets/linen1.jpg" alt="Linen Pants" />
+    <div class="thumbnail-row">
+      <img src="assets/linen2.jpg" alt="Thumbnail" />
+      <img src="assets/linen3.png" alt="Thumbnail" />
+      <img src="assets/linen4.jpg" alt="Thumbnail" />
+    </div>
+  </div>
+
+  <div class="product-info">
+    <p class="category">PANTS</p>
+    <h2>Linen Pants</h2>
+    <p class="price">$39.00</p>
+
+    <form>
+      <label for="size">Size:</label>
+      <select id="size">
+        <option>XS</option>
+        <option>S</option>
+        <option>M</option>
+        <option>L</option>
+        <option>XL</option>
+      </select>
+
+      <label for="quantity">Quantity:</label>
+      <div class="quantity-control">
+        <button type="button" id="decrease-btn">−</button>
+        <input type="number" id="quantity" value="1" min="1"/>
+        <button type="button" id="increase-btn">+</button>
+      </div>
+
+      <p class="stock" data-stock="10">Availability: <strong>10 in stock</strong></p>
+
+      <button type="button" class="add-to-cart-btn">Add to Cart</button>
+    </form>
+
+</main>
+
+<section class="container description-section">
+  <div class="tabs">
+    <button class="active">Description</button>
+  </div>
+  <div class="description">
+    <p>Stylish, lightweight linen pants perfect for summer. Designed by styleX.</p>
+    <ul>
+      <li>100% Linen</li>
+      <li>Handmade finish</li>
+      <li>Machine washable</li>
+    </ul>
+  </div>
+
+  <div class="additional-info">
+    <h4>Additional Information</h4>
+    <p><strong>Dimensions:</strong> 30x40x2 cm</p>
+    <p><strong>Weight:</strong> 0.3 kg</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container text-center">
+    &copy; 2025 styleX. All rights reserved. | <a href="impressum.html">Impressum</a>
+  </div>
+</footer>
+
+</body>
+</html>
