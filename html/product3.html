@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product – Linen Pants</title>
   <link rel="stylesheet" href="../styles.css" />
-  <script src="../script.js"></script>
 </head>
+
 <body>
 
 <header>
@@ -49,9 +49,9 @@
 
       <label for="quantity">Quantity:</label>
       <div class="quantity-control">
-        <button type="button" onclick="decreaseQty()">−</button>
+        <button type="button" id="decrease-btn">−</button>
         <input type="number" id="quantity" value="1" min="1"/>
-        <button type="button" onclick="increaseQty()">+</button>
+        <button type="button" id="increase-btn">+</button>
       </div>
 
       <p class="stock" data-stock="4">Availability: <strong>4 in stock</strong></p>
@@ -87,16 +87,7 @@
   </div>
 </footer>
 
-<script>
-  function increaseQty() {
-    const input = document.getElementById('quantity');
-    input.value = parseInt(input.value) + 1;
-  }
-  function decreaseQty() {
-    const input = document.getElementById('quantity');
-    if (parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
-  }
-</script>
+<script src="../script.js" defer></script>
 
 </body>
 </html>
