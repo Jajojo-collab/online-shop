@@ -59,10 +59,47 @@ function renderCartItems() {
   document.getElementById("summary-total").textContent = (total + 5).toFixed(2) + " CHF";
 }
 
-// Event Listener für Produktseite
+// 🆕 Cart-Daten für Checkout speichern
+function prepareCheckoutData() {
+  const cart = getCart();
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const summary = {
+    cartItems: cart,
+    shipping: 5,
+    total: total + 5
+  };
+  localStorage.setItem("checkoutData", JSON.stringify(summary));
+}
+
+// 🆕 checkout.html – Cart-Daten anzeigen
+function renderCheckoutPage() {
+  const data = JSON.parse(localStorage.getItem("checkoutData"));
+  if (!data) return;
+
+  const productSummary = document.querySelector(".product-summary");
+  const priceSummary = document.querySelector(".price-summary");
+
+  if (!productSummary || !priceSummary) return;
+
+  productSummary.innerHTML = "";
+  data.cartItems.forEach(item => {
+    const el = document.createElement("p");
+    el.innerHTML = `${item.name} (Size: ${item.size}) x${item.quantity} <span>${(item.price * item.quantity).toFixed(2)} CHF</span>`;
+    productSummary.appendChild(el);
+  });
+
+  priceSummary.innerHTML = `
+    <p>Subtotal <span>${(data.total - data.shipping).toFixed(2)} CHF</span></p>
+    <p>Shipping <span>${data.shipping.toFixed(2)} CHF</span></p>
+    <p class="total">TOTAL <span>${data.total.toFixed(2)} CHF</span></p>
+  `;
+}
+
+// Event Listener für Produktseite & Cart
 document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   renderCartItems();
+  renderCheckoutPage(); // 🆕
 
   const addBtn = document.querySelector(".add-to-cart-btn");
   if (addBtn) {
@@ -74,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const product = { name, price, size, quantity };
       addToCart(product);
-   
     });
   }
 
@@ -91,6 +127,25 @@ document.addEventListener("DOMContentLoaded", () => {
       if (parseInt(quantityInput.value) > 1) {
         quantityInput.value = parseInt(quantityInput.value) - 1;
       }
+    });
+  }
+
+  // 🆕 Checkout vorbereiten & Cart löschen beim Button-Klick (auf cart.html)
+  const checkoutBtn = document.querySelector(".checkout-btn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+      prepareCheckoutData();
+      localStorage.removeItem("cart");       // 🧹 Cart leeren
+      updateCartCount();                     // 🆙 Cart Count updaten
+    });
+  }
+
+  // 🆕 Cart löschen beim Order-Submit (auf checkout.html)
+  const orderBtn = document.querySelector(".order");
+  if (orderBtn) {
+    orderBtn.addEventListener("click", () => {
+      localStorage.removeItem("cart");
+      localStorage.removeItem("checkoutData");
     });
   }
 });
