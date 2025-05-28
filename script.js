@@ -1,5 +1,218 @@
 // script.js
 
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("product.html")) {
+    getSingleGarment();
+  }
+  if (window.location.pathname.includes("shop.html")) {
+    loadProducts();
+  }
+});
+
+async function getAllGarments() {
+  try {
+    const response = await fetch('https://pb28.toiwxr.easypanel.host/api/collections/styleX/records', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const data = await response.json();
+    return data.items || [];
+  } catch (error) {
+    console.error("Fehler beim Abrufen der Kleidungsstücke:", error);
+    alert("Ein Fehler ist aufgetreten beim Abrufen der Kleidungsstücke.");
+    return [];
+  }
+}
+
+function getImageUrl(item, index = 0) {
+  if (!item || !item.Pictures || !item.id || item.Pictures.length === 0) return 'assets/placeholder.jpg';
+  return `https://pb28.toiwxr.easypanel.host/api/files/styleX/${item.id}/${item.Pictures[index]}`;
+}
+
+function renderProductCard(item) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.setAttribute('data-id', item.id);
+  card.setAttribute('data-name', item.Garment);
+  card.setAttribute('data-price', item.Price);
+  card.setAttribute('data-category', item.category);
+  card.setAttribute('data-pictures', item.Pictures);
+
+  card.innerHTML = `
+    <a href="product.html?id=${item.id}">
+      <img src="${getImageUrl(item)}" alt="${item.Garment}">
+      <h3>${item.Garment}</h3>
+      <p>styleX</p>
+      <span>${item.Price} CHF</span>
+    </a>
+  `;
+
+  return card;
+}
+
+async function loadProducts() {
+  const grid = document.getElementById('product-grid');
+  const products = await getAllGarments();
+
+  products.forEach(item => {
+    const card = renderProductCard(item);
+    grid.appendChild(card);
+  });
+}
+
+async function getSingleGarment() {
+  const id = new URLSearchParams(window.location.search).get("id");
+  if (!id) return;
+
+  try {
+    const response = await fetch(`https://pb28.toiwxr.easypanel.host/api/collections/styleX/records/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const data = await response.json();
+
+    document.querySelector("#Price").textContent = data.Price.toFixed(2) + "CHF" || "";
+    document.querySelector("#Garment").textContent = data.Garment || "";
+    document.querySelector("#description").innerHTML = data.Description || "Keine Beschreibung verfügbar";
+    document.querySelector("#Weight").innerHTML = data.Weight || "Kein Gewicht verfügbar";
+    document.querySelector("#Dimensions").innerHTML = data.Dimensions || "Keine Masse verfügbar";
+    document.querySelector("#Pictures").innerHTML = data.Pictures || "Keine Bilder verfügbar";
+
+    // Hauptbild anzeigen
+const mainImg = document.getElementById("main-image");
+if (mainImg) {
+  mainImg.src = getImageUrl(data, 0);
+}
+
+// Thumbnails rendern
+const thumbsContainer = document.getElementById("thumbnails");
+thumbsContainer.innerHTML = "";
+
+data.Pictures.forEach((pic, i) => {
+  const img = document.createElement("img");
+  img.src = getImageUrl(data, i);
+  img.alt = "Thumbnail";
+  img.className = "thumb";
+  img.style = "width: 60px; cursor: pointer; margin-right: 5px; border-radius: 4px;";
+
+  img.addEventListener("click", () => {
+    mainImg.src = img.src;
+  });
+
+  thumbsContainer.appendChild(img);
+});
+
+
+  } catch (error) {
+    console.error("Fehler beim Abrufen des Kleidungsstücks:", error);
+    alert("Ein Fehler ist aufgetreten beim Abrufen des Kleidungsstücks.");
+  }
+}
+
+async function addContact() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
+  const message = document.getElementById("message").value;
+  const fileInput = document.getElementById("file-upload");
+
+  if (!name || !email || !message || !phone) {
+    alert("Bitte fülle alle Felder aus.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("Name", name);
+  formData.append("E_Mail", email);
+  formData.append("Telefon_nr", phone);
+  formData.append("Message", message);
+
+  if (fileInput.files.length > 0) {
+    formData.append("Anhang", fileInput.files[0]);
+  }
+
+  try {
+    const response = await fetch('https://pb28.toiwxr.easypanel.host/api/collections/Contact/records', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Fehler beim Speichern:", errorData);
+      alert("Ein Fehler ist aufgetreten beim Speichern.");
+      return;
+    }
+
+    const result = await response.json();
+    console.log("Gespeichert:", result);
+  } catch (error) {
+    console.error("Netzwerkfehler:", error);
+  }
+}
+
+
+
+
+// async function getProductById(id) {
+//   const id = new URLSearchParams(window.location.search).get("id");
+//   if (!id) return;
+
+//   try {
+//     const pb = new PocketBase("http://127.0.0.1:8090");
+//     const item = await pb.collection("kleider").getOne(id);
+
+//     // Jetzt kannst du das HTML befüllen
+//     document.querySelector(".product-title").textContent = item.title;
+//     document.querySelector(".product-price").textContent = parseFloat(item.price).toFixed(2) + " CHF";
+//     document.querySelector(".product-description").textContent = item.description || "Keine Beschreibung verfügbar";
+//     // usw.
+
+//   } catch (error) {
+//     console.error("Fehler beim Laden des Produkts:", error);
+//   }
+// }
+
+
+
+
+async function fetchKleider() {
+  try {
+    const result = await pb.collection('kleider').getFullList({
+      sort: '-created',
+    });
+
+    const grid = document.querySelector('.grid');
+    grid.innerHTML = ''; // Vorhandene statische Karten entfernen
+
+    result.forEach(item => {
+      const card = document.createElement('div');
+      card.classList.add('product-card');
+
+      card.innerHTML = `
+        <img src="assets/placeholder.jpg" style="border-radius: 8px; width: 100%; margin-bottom: 0.5rem;">
+        <h3>${item.title}</h3>
+        <p>styleX</p>
+        <span>${item.price.toFixed(2)} CHF</span>
+      `;
+
+      grid.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error('Fehler beim Abrufen der Daten:', err);
+  }
+}
+fetchKleider();
+
+
+
 // Cart aus localStorage laden
 function getCart() {
   return JSON.parse(localStorage.getItem("cart")) || [];

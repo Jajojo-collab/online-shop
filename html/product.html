@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Product – Oversized Sweater</title>
+  <title>Product – Linen Pants</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -24,17 +24,19 @@
 
 <main class="container product-page">
   <div class="product-gallery">
-    <img class="main-image" src="assets/sweater.jpg" alt="Linen Pants" />
-    <div class="thumbnail-row">
-      <img src="assets/sweater1.jpg" alt="Thumbnail" />
-      <img src="assets/sweater2.png" alt="Thumbnail" />
-      <img src="assets/sweater3.png" alt="Thumbnail" />
-    </div>
+<div class="product-gallery">
+  <img class="main-image" id="main-image" src="assets/placeholder.jpg" alt="Produktbild" />
+  <div class="thumbnail-row" id="thumbnails" style="margin-top: 1rem; display: flex; gap: 5px;"></div>
+  <div class="thumbnail-row" id="thumbnail-row">
+    <!-- Thumbnails werden hier von JS eingefügt -->
   </div>
+</div>
+  </div>
+
   <div class="product-info">
-    <p class="category">SWEATER</p>
-    <h2>Oversized Sweater</h2>
-    <p class="price">$49.00</p>
+    <p class="category">TOP</p>
+    <h2><div id="Garment"></div></h2>
+    <p class="price" id="Price"></p>
 
     <form>
       <label for="size">Size:</label>
@@ -53,31 +55,28 @@
         <button type="button" id="increase-btn">+</button>
       </div>
 
-      <p class="stock" data-stock="5">Availability: <strong>5 in stock</strong></p>
+      <p class="stock" data-stock="15">Availability: <strong>15 in stock</strong></p>
+
 
       <button type="button" class="add-to-cart-btn">Add to Cart</button>
     </form>
 
-  </div>
+
 </main>
 
 <section class="container description-section">
   <div class="tabs">
     <button class="active">Description</button>
+
   </div>
-  <div class="description">
-    <p>Stylish, lightweight linen pants perfect for summer. Designed by styleX.</p>
-    <ul>
-      <li>100% Linen</li>
-      <li>Handmade finish</li>
-      <li>Machine washable</li>
-    </ul>
+  <div class="description" id="description">
+
   </div>
 
   <div class="additional-info">
     <h4>Additional Information</h4>
-    <p><strong>Dimensions:</strong> 30x40x2 cm</p>
-    <p><strong>Weight:</strong> 0.3 kg</p>
+    <p><strong>Dimensions:</strong> <div id="Dimensions"></div></p>
+    <p><strong>Weight:</strong> <span id="Weight"></span> kg</p>
   </div>
 </section>
 
@@ -86,8 +85,7 @@
     &copy; 2025 styleX. All rights reserved. | <a href="impressum.html">Impressum</a>
   </div>
 </footer>
-
+<script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
 <script src="../script.js" defer></script>
-
 </body>
 </html>
