@@ -120,12 +120,6 @@ nav a:hover {
   margin-bottom: 4rem;
 }
 
-.thumbnail-row img:hover {
-  box-shadow: 0 0 6px #888;
-  transform: scale(1.05);
-  transition: 0.2s ease;
-}
-
 .product-card img {
   border-radius: 8px;
   width: 100%;
