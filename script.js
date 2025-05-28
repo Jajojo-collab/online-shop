@@ -94,7 +94,7 @@ if (mainImg) {
 const thumbsContainer = document.getElementById("thumbnails");
 thumbsContainer.innerHTML = "";
 
-data.Pictures.forEach((pic, i) => {
+data.Pictures.slice(0, 3).forEach((pic, i) => {
   const img = document.createElement("img");
   img.src = getImageUrl(data, i);
   img.alt = "Thumbnail";
@@ -156,31 +156,6 @@ async function addContact() {
     console.error("Netzwerkfehler:", error);
   }
 }
-
-
-
-
-// async function getProductById(id) {
-//   const id = new URLSearchParams(window.location.search).get("id");
-//   if (!id) return;
-
-//   try {
-//     const pb = new PocketBase("http://127.0.0.1:8090");
-//     const item = await pb.collection("kleider").getOne(id);
-
-//     // Jetzt kannst du das HTML befüllen
-//     document.querySelector(".product-title").textContent = item.title;
-//     document.querySelector(".product-price").textContent = parseFloat(item.price).toFixed(2) + " CHF";
-//     document.querySelector(".product-description").textContent = item.description || "Keine Beschreibung verfügbar";
-//     // usw.
-
-//   } catch (error) {
-//     console.error("Fehler beim Laden des Produkts:", error);
-//   }
-// }
-
-
-
 
 async function fetchKleider() {
   try {
