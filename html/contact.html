@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>styleX – Contact</title>
   <link rel="stylesheet" href="../styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
   <header>
@@ -49,30 +51,29 @@
             <a href="https://linkedin.com" target="_blank"><i data-feather="linkedin"></i></a>
           </div>
         </div>
-        </div>
       </div>
-
-      <!-- Floating Form -->
-      <form class="contact-form" action="php/contact-form.php" method="POST" enctype="multipart/form-data">
-        <h3>Feedback Form</h3>
-        <label>Name</label>
-        <input type="text" name="name" required />
-        <label>Email</label>
-        <input type="email" name="email" required />
-        <label>Phone</label>
-        <input type="tel" name="phone" />
-        <label>Message</label>
-        <textarea name="message" rows="4" required></textarea>
-        <div class="upload-wrapper">
-          <label for="file-upload" class="upload-label">
-            <i data-feather="upload"></i> Upload file
-        </label>
-        
-          <input type="file" id="file-upload" name="file" hidden>
-        </div>
-        <button type="submit" class="submit-btn">Send Message →</button>
-      </form>
     </div>
+
+    <!-- Floating Form -->
+   <form class="contact-form">
+      <h3>Feedback Form</h3>
+      <label>Name</label>
+      <input type="text" name="name" id="name" required />
+      <label>Email</label>
+      <input type="email" name="email" id="email" required />
+      <label>Phone</label>
+      <input type="tel" name="phone" id="phone" />
+      <label>Message</label>
+      <textarea name="message" id="message" rows="4" required></textarea>
+      <div class="upload-wrapper">
+        <label for="file-upload" class="upload-label">
+          <i data-feather="upload"></i> Upload file
+        </label>
+
+        <input type="file" id="file-upload" name="file" hidden>
+      </div>
+      <button type="submit" class="submit-btn">Send Message →</button>
+    </form>
   </div>
 
   <footer>
@@ -82,9 +83,11 @@
   </footer>
 
   <script src="https://unpkg.com/feather-icons"></script>
-<script>
-  feather.replace();
-</script>
+  <script>
+    feather.replace();
+  </script>
+  <script src="../script.js"></script>
 
 </body>
+
 </html>

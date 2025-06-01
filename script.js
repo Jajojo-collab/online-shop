@@ -7,6 +7,64 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("shop.html")) {
     loadProducts();
   }
+
+  updateCartCount();
+  renderCartItems();
+  renderCheckoutPage(); // 🆕
+
+  const addBtn = document.querySelector(".add-to-cart-btn");
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      const name = document.querySelector(".product-info h2").textContent;
+      const price = parseFloat(document.querySelector(".price").textContent.replace("$", ""));
+      const size = document.getElementById("size").value;
+      const quantity = parseInt(document.getElementById("quantity").value);
+
+      const product = { name, price, size, quantity };
+      addToCart(product);
+    });
+  }
+
+  const increaseBtn = document.getElementById("increase-btn");
+  const decreaseBtn = document.getElementById("decrease-btn");
+  const quantityInput = document.getElementById("quantity");
+
+  if (increaseBtn && decreaseBtn && quantityInput) {
+    increaseBtn.addEventListener("click", () => {
+      quantityInput.value = parseInt(quantityInput.value) + 1;
+    });
+
+    decreaseBtn.addEventListener("click", () => {
+      if (parseInt(quantityInput.value) > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+      }
+    });
+  }
+
+  // 🆕 Checkout vorbereiten & Cart löschen beim Button-Klick (auf cart.html)
+  const checkoutBtn = document.querySelector(".checkout-btn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+      prepareCheckoutData();
+      localStorage.removeItem("cart");       // 🧹 Cart leeren
+      updateCartCount();                     // 🆙 Cart Count updaten
+    });
+  }
+
+  // 🆕 Cart löschen beim Order-Submit (auf checkout.html)
+  const orderBtn = document.querySelector(".order");
+  if (orderBtn) {
+    orderBtn.addEventListener("click", () => {
+      localStorage.removeItem("cart");
+      localStorage.removeItem("checkoutData");
+    });
+  }
+
+  // 🚨 HIER DER WICHTIGE FIX FÜR DAS CONTACT FORM 🚨
+  const contactForm = document.querySelector(".contact-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", submitContact);
+  }
 });
 
 async function getAllGarments() {
@@ -46,7 +104,7 @@ function renderProductCard(item) {
       <img src="${getImageUrl(item)}" alt="${item.Garment}">
       <h3>${item.Garment}</h3>
       <p>styleX</p>
-      <span>${item.Price} CHF</span>
+      <span>${item.Price.toFixed(2)} CHF</span>
     </a>
   `;
 
@@ -82,32 +140,30 @@ async function getSingleGarment() {
     document.querySelector("#description").innerHTML = data.Description || "Keine Beschreibung verfügbar";
     document.querySelector("#Weight").innerHTML = data.Weight || "Kein Gewicht verfügbar";
     document.querySelector("#Dimensions").innerHTML = data.Dimensions || "Keine Masse verfügbar";
-    document.querySelector("#Pictures").innerHTML = data.Pictures || "Keine Bilder verfügbar";
 
     // Hauptbild anzeigen
-const mainImg = document.getElementById("main-image");
-if (mainImg) {
-  mainImg.src = getImageUrl(data, 0);
-}
+    const mainImg = document.getElementById("main-image");
+    if (mainImg) {
+      mainImg.src = getImageUrl(data, 0);
+    }
 
-// Thumbnails rendern
-const thumbsContainer = document.getElementById("thumbnails");
-thumbsContainer.innerHTML = "";
+    // Thumbnails rendern
+    const thumbsContainer = document.getElementById("thumbnails");
+    thumbsContainer.innerHTML = "";
 
-data.Pictures.slice(0, 3).forEach((pic, i) => {
-  const img = document.createElement("img");
-  img.src = getImageUrl(data, i);
-  img.alt = "Thumbnail";
-  img.className = "thumb";
-  img.style = "width: 60px; cursor: pointer; margin-right: 5px; border-radius: 4px;";
+    data.Pictures.slice(0, 3).forEach((pic, i) => {
+      const img = document.createElement("img");
+      img.src = getImageUrl(data, i);
+      img.alt = "Thumbnail";
+      img.className = "thumb";
+      img.style = "width: 60px; cursor: pointer; margin-right: 5px; border-radius: 4px;";
 
-  img.addEventListener("click", () => {
-    mainImg.src = img.src;
-  });
+      img.addEventListener("click", () => {
+        mainImg.src = img.src;
+      });
 
-  thumbsContainer.appendChild(img);
-});
-
+      thumbsContainer.appendChild(img);
+    });
 
   } catch (error) {
     console.error("Fehler beim Abrufen des Kleidungsstücks:", error);
@@ -152,9 +208,17 @@ async function addContact() {
 
     const result = await response.json();
     console.log("Gespeichert:", result);
+    alert("Danke für deine Nachricht!"); // <-- neu
+    document.querySelector(".contact-form").reset(); // <-- neu
+
   } catch (error) {
     console.error("Netzwerkfehler:", error);
   }
+}
+
+function submitContact(event) {
+  event.preventDefault();
+  addContact();
 }
 
 async function fetchKleider() {
@@ -185,8 +249,6 @@ async function fetchKleider() {
   }
 }
 fetchKleider();
-
-
 
 // Cart aus localStorage laden
 function getCart() {
@@ -282,58 +344,3 @@ function renderCheckoutPage() {
     <p class="total">TOTAL <span>${data.total.toFixed(2)} CHF</span></p>
   `;
 }
-
-// Event Listener für Produktseite & Cart
-document.addEventListener("DOMContentLoaded", () => {
-  updateCartCount();
-  renderCartItems();
-  renderCheckoutPage(); // 🆕
-
-  const addBtn = document.querySelector(".add-to-cart-btn");
-  if (addBtn) {
-    addBtn.addEventListener("click", () => {
-      const name = document.querySelector(".product-info h2").textContent;
-      const price = parseFloat(document.querySelector(".price").textContent.replace("$", ""));
-      const size = document.getElementById("size").value;
-      const quantity = parseInt(document.getElementById("quantity").value);
-
-      const product = { name, price, size, quantity };
-      addToCart(product);
-    });
-  }
-
-  const increaseBtn = document.getElementById("increase-btn");
-  const decreaseBtn = document.getElementById("decrease-btn");
-  const quantityInput = document.getElementById("quantity");
-
-  if (increaseBtn && decreaseBtn && quantityInput) {
-    increaseBtn.addEventListener("click", () => {
-      quantityInput.value = parseInt(quantityInput.value) + 1;
-    });
-
-    decreaseBtn.addEventListener("click", () => {
-      if (parseInt(quantityInput.value) > 1) {
-        quantityInput.value = parseInt(quantityInput.value) - 1;
-      }
-    });
-  }
-
-  // 🆕 Checkout vorbereiten & Cart löschen beim Button-Klick (auf cart.html)
-  const checkoutBtn = document.querySelector(".checkout-btn");
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", () => {
-      prepareCheckoutData();
-      localStorage.removeItem("cart");       // 🧹 Cart leeren
-      updateCartCount();                     // 🆙 Cart Count updaten
-    });
-  }
-
-  // 🆕 Cart löschen beim Order-Submit (auf checkout.html)
-  const orderBtn = document.querySelector(".order");
-  if (orderBtn) {
-    orderBtn.addEventListener("click", () => {
-      localStorage.removeItem("cart");
-      localStorage.removeItem("checkoutData");
-    });
-  }
-});
