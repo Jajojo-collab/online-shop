@@ -1,6 +1,7 @@
 // script.js
 
 document.addEventListener("DOMContentLoaded", () => {
+  
   if (window.location.pathname.includes("product.html")) {
     getSingleGarment();
   }
@@ -10,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateCartCount();
   renderCartItems();
-  renderCheckoutPage(); // 🆕
+  renderCheckoutPage(); //
 
   const addBtn = document.querySelector(".add-to-cart-btn");
   if (addBtn) {
@@ -41,17 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 🆕 Checkout vorbereiten & Cart löschen beim Button-Klick (auf cart.html)
+  // Checkout vorbereiten & Cart löschen beim Button-Klick (auf cart.html)
   const checkoutBtn = document.querySelector(".checkout-btn");
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", () => {
       prepareCheckoutData();
-      localStorage.removeItem("cart");       // 🧹 Cart leeren
-      updateCartCount();                     // 🆙 Cart Count updaten
+      localStorage.removeItem("cart");       // Cart leeren
+      updateCartCount();                     // Cart Count updaten
     });
   }
 
-  // 🆕 Cart löschen beim Order-Submit (auf checkout.html)
+  //  Cart löschen beim Order-Submit (auf checkout.html)
   const orderBtn = document.querySelector(".order");
   if (orderBtn) {
     orderBtn.addEventListener("click", () => {
@@ -60,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 🚨 HIER DER WICHTIGE FIX FÜR DAS CONTACT FORM 🚨
+  //  HIER DER WICHTIGE FIX FÜR DAS CONTACT FORM 
   const contactForm = document.querySelector(".contact-form");
   if (contactForm) {
     contactForm.addEventListener("submit", submitContact);
@@ -120,6 +121,8 @@ async function loadProducts() {
     grid.appendChild(card);
   });
 }
+
+
 
 async function getSingleGarment() {
   const id = new URLSearchParams(window.location.search).get("id");
