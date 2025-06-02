@@ -350,6 +350,17 @@ select {
   background-color: #333;
 }
 
+.product-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-card a h3,
+.product-card a p,
+.product-card a span {
+  text-decoration: none;
+  border: none;
+}
 
 /* Beschreibung */
 

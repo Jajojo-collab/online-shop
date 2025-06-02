@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (addBtn) {
     addBtn.addEventListener("click", () => {
       const name = document.querySelector(".product-info h2").textContent;
-      const price = parseFloat(document.querySelector(".price").textContent.replace("$", ""));
+      const price = parseFloat(document.querySelector(".price").textContent.replace(" CHF", ""));
       const size = document.getElementById("size").value;
       const quantity = parseInt(document.getElementById("quantity").value);
 
@@ -99,14 +99,14 @@ function renderProductCard(item) {
   card.setAttribute('data-category', item.category);
   card.setAttribute('data-pictures', item.Pictures);
 
-  card.innerHTML = `
-    <a href="product.html?id=${item.id}">
-      <img src="${getImageUrl(item)}" alt="${item.Garment}">
-      <h3>${item.Garment}</h3>
-      <p>styleX</p>
-      <span>${item.Price.toFixed(2)} CHF</span>
-    </a>
-  `;
+card.innerHTML = `
+  <a href="product.html?id=${item.id}">
+    <img src="${getImageUrl(item)}" alt="${item.Garment}">
+    <h3>${item.Garment}</h3>
+    <p>styleX</p>
+    <span>${item.Price.toFixed(2)} CHF</span>
+  </a>
+`;
 
   return card;
 }
@@ -135,9 +135,36 @@ async function getSingleGarment() {
 
     const data = await response.json();
 
-    document.querySelector("#Price").textContent = data.Price.toFixed(2) + "CHF" || "";
+    document.querySelector("#Price").textContent = data.Price.toFixed(2) + " CHF" || "";
     document.querySelector("#Garment").textContent = data.Garment || "";
-    document.querySelector("#description").innerHTML = data.Description || "Keine Beschreibung verfügbar";
+
+    // Hier kommt der neue Beschreibungskram:
+    let description = data.Description || "Keine Beschreibung verfügbar";
+
+    // Beschreibung in Zeilen splitten
+    const lines = description.split('\n');
+
+// Erstes Satzpaar als normalen Text, der Rest als Liste
+    const firstLines = [];
+    const listItems = [];
+
+lines.forEach(line => {
+  if (line.startsWith('-')) {
+    listItems.push(line.replace(/^-/, '').trim()); // Entferne das '-'
+  } else {
+    firstLines.push(line.trim());
+  }
+});
+
+    const firstPart = firstLines.join('<br>');
+    let listPart = '';
+
+    if (listItems.length) {
+      listPart = '<ul>' + listItems.map(item => `<li>${item}</li>`).join('') + '</ul>';
+    }
+
+    document.querySelector("#description").innerHTML = firstPart + listPart || "Keine Beschreibung verfügbar";
+
     document.querySelector("#Weight").innerHTML = data.Weight || "Kein Gewicht verfügbar";
     document.querySelector("#Dimensions").innerHTML = data.Dimensions || "Keine Masse verfügbar";
 
@@ -151,7 +178,7 @@ async function getSingleGarment() {
     const thumbsContainer = document.getElementById("thumbnails");
     thumbsContainer.innerHTML = "";
 
-    data.Pictures.slice(0, 3).forEach((pic, i) => {
+    data.Pictures.slice(0, 4).forEach((pic, i) => {
       const img = document.createElement("img");
       img.src = getImageUrl(data, i);
       img.alt = "Thumbnail";
@@ -234,12 +261,14 @@ async function fetchKleider() {
       const card = document.createElement('div');
       card.classList.add('product-card');
 
-      card.innerHTML = `
-        <img src="assets/placeholder.jpg" style="border-radius: 8px; width: 100%; margin-bottom: 0.5rem;">
-        <h3>${item.title}</h3>
-        <p>styleX</p>
-        <span>${item.price.toFixed(2)} CHF</span>
-      `;
+    card.innerHTML = `
+      <div style="text-decoration: none; border: none; box-shadow: none;">
+      <img src="${getImageUrl(item)}" alt="${item.Garment}" style="border-radius: 8px; width: 100%; margin-bottom: 0.5rem;">
+      <h3 style="text-decoration: none; border: none; margin: 0;">${item.Garment}</h3>
+      <p style="margin: 0;">styleX</p>
+      <span style="text-decoration: none; border: none;">${item.Price.toFixed(2)} CHF</span>
+      </div>
+  `;
 
       grid.appendChild(card);
     });
@@ -248,7 +277,21 @@ async function fetchKleider() {
     console.error('Fehler beim Abrufen der Daten:', err);
   }
 }
-fetchKleider();
+if (window.location.pathname.includes("index.html") || window.location.pathname === "/") {
+  loadHomeProducts(); // neue Funktion für die Startseite
+}
+
+async function loadHomeProducts() {
+  const grid = document.getElementById('product-grid');
+  if (!grid) return;
+
+  const products = await getAllGarments();
+
+  products.slice(0, 3).forEach(item => { // z.B. nur 3 Produkte für die Startseite
+    const card = renderProductCard(item);
+    grid.appendChild(card);
+  });
+}
 
 // Cart aus localStorage laden
 function getCart() {
