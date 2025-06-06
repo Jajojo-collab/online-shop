@@ -1,7 +1,7 @@
 // script.js
 
 document.addEventListener("DOMContentLoaded", () => {
-  
+
   if (window.location.pathname.includes("product.html")) {
     getSingleGarment();
   }
@@ -100,7 +100,7 @@ function renderProductCard(item) {
   card.setAttribute('data-category', item.category);
   card.setAttribute('data-pictures', item.Pictures);
 
-card.innerHTML = `
+  card.innerHTML = `
   <a href="product.html?id=${item.id}">
     <img src="${getImageUrl(item)}" alt="${item.Garment}">
     <h3>${item.Garment}</h3>
@@ -138,6 +138,28 @@ async function getSingleGarment() {
 
     const data = await response.json();
 
+    // === LAGERBEGRENZUNG ===
+    const quantityInput = document.getElementById('quantity');
+    const stockElement = document.querySelector('.stock');
+    const maxStock = parseInt(data["#Stueckzahl"]) || 99; // <- Zugriff auf das Feld
+
+    if (stockElement) {
+      stockElement.textContent = `Nur noch ${maxStock} Stück verfügbar!`;
+      stockElement.setAttribute("data-stock", maxStock);
+    }
+
+    if (quantityInput) {
+      quantityInput.max = maxStock;
+    }
+
+    const input = document.getElementById('quantity');
+    const stockElement = document.querySelector('.stock'); // Muss im HTML vorhanden sein
+    const maxStock = parseInt(stockElement?.getAttribute('data-stock') || "99");
+
+    if (input) {
+      input.max = maxStock;
+    }
+
     document.querySelector("#Price").textContent = data.Price.toFixed(2) + " CHF" || "";
     document.querySelector("#Garment").textContent = data.Garment || "";
 
@@ -147,17 +169,17 @@ async function getSingleGarment() {
     // Beschreibung in Zeilen splitten
     const lines = description.split('\n');
 
-// Erstes Satzpaar als normalen Text, der Rest als Liste
+    // Erstes Satzpaar als normalen Text, der Rest als Liste
     const firstLines = [];
     const listItems = [];
 
-lines.forEach(line => {
-  if (line.startsWith('-')) {
-    listItems.push(line.replace(/^-/, '').trim()); // Entferne das '-'
-  } else {
-    firstLines.push(line.trim());
-  }
-});
+    lines.forEach(line => {
+      if (line.startsWith('-')) {
+        listItems.push(line.replace(/^-/, '').trim()); // Entferne das '-'
+      } else {
+        firstLines.push(line.trim());
+      }
+    });
 
     const firstPart = firstLines.join('<br>');
     let listPart = '';
@@ -264,7 +286,7 @@ async function fetchKleider() {
       const card = document.createElement('div');
       card.classList.add('product-card');
 
-    card.innerHTML = `
+      card.innerHTML = `
       <div style="text-decoration: none; border: none; box-shadow: none;">
       <img src="${getImageUrl(item)}" alt="${item.Garment}" style="border-radius: 8px; width: 100%; margin-bottom: 0.5rem;">
       <h3 style="text-decoration: none; border: none; margin: 0;">${item.Garment}</h3>
